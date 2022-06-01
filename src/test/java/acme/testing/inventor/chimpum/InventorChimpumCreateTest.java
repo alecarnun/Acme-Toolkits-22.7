@@ -58,6 +58,8 @@ public class InventorChimpumCreateTest extends TestHarness {
 		super.checkInputBoxHasValue("budget", budget);
 		super.checkInputBoxHasValue("info", info);
 		
+		super.clickOnSubmit("Delete");
+		
 		super.signOut();
 		
 		
@@ -74,7 +76,7 @@ public class InventorChimpumCreateTest extends TestHarness {
 		super.clickOnMenu("Inventor", "List my items");
 		super.checkListingExists();
 		super.sortListing(0, "desc");
-		super.clickOnListingRecord(2);
+		super.clickOnListingRecord(0);
 		
 		super.clickOnButton("Create chimpum");
 		
