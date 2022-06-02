@@ -1,6 +1,8 @@
 package acme.features.inventor.chimpum;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,7 +35,7 @@ public class InventorChimpumUpdateService implements AbstractUpdateService<Inven
 		item = this.repository.findOneItemByChimpumId(chimpumId);
 
 		// Check that the inventor updating the chimpum is the one who owns the item
-		if (item.getInventor().getId() != principalId)
+		if (item == null || item.getInventor().getId() != principalId)
 			result = false;
 
 		return result;
@@ -41,7 +43,7 @@ public class InventorChimpumUpdateService implements AbstractUpdateService<Inven
 
 	@Override
 	public void bind(final Request<Chimpum> request, final Chimpum entity, final Errors errors) {
-		request.bind(entity, errors, "title", "description", "startDate", "endDate", "budget", "info");
+		request.bind(entity, errors, "code", "title", "description", "startDate", "endDate", "budget", "info");
 
 	}
 
@@ -115,6 +117,38 @@ public class InventorChimpumUpdateService implements AbstractUpdateService<Inven
 			errors.state(request, this.repository.isAcceptedCurrency(currency), "budget",
 					"inventor.chimpum.form.error.not-accepted-currency");
 			errors.state(request, budget > 0.0, "budget", "inventor.chimpum.form.error.negative-price");
+		}
+
+		if (!errors.hasErrors("code")) {
+			String code;
+			Date creationDate;
+			String onlyNumbers;
+
+			String creationDateOnlyNumbers;
+
+			// ^\\w{3}-yymm:dd$ ==> ABC-2206:02 ==> 2022/06/02
+
+			code = entity.getCode();
+			creationDate = entity.getCreationDate();
+
+			// ABC-2206:02 => 220602
+			onlyNumbers = code.replaceAll("\\D", "");
+
+			// Creation date in the same format and order (220602)
+			creationDateOnlyNumbers = new SimpleDateFormat("yyMMdd").format(creationDate);
+
+			errors.state(request, onlyNumbers.equals(creationDateOnlyNumbers), "code",
+					"inventor.chimpum.form.error.invalid-code-date");
+
+			// Check that there is not a chimpum with the same code
+			Chimpum existing;
+			Integer id;
+
+			existing = this.repository.findOneChimpumByCode(entity.getCode());
+			id = request.getModel().getInteger("id");
+
+			errors.state(request, existing == null || existing.getId() == id, "code",
+					"inventor.chimpum.form.error.duplicated");
 		}
 	}
 

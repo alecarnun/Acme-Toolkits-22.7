@@ -33,7 +33,7 @@ public class InventorChimpumShowService implements AbstractShowService<Inventor,
 		item = this.repository.findOneItemByChimpumId(chimpumId);
 		inventorId = request.getPrincipal().getActiveRoleId();
 
-		return item.getInventor().getId() == inventorId;
+		return item != null && item.getInventor().getId() == inventorId;
 	}
 
 	@Override
@@ -59,5 +59,4 @@ public class InventorChimpumShowService implements AbstractShowService<Inventor,
 		final Money exchange = this.exchangeService.getExchange(entity.getBudget());
 		model.setAttribute("exchange", exchange);
 	}
-
 }

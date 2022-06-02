@@ -12,26 +12,26 @@ import acme.framework.services.AbstractListService;
 import acme.roles.Inventor;
 
 @Service
-public class InventorChimpumListService implements AbstractListService<Inventor, Chimpum>{
+public class InventorChimpumListService implements AbstractListService<Inventor, Chimpum> {
 
 	@Autowired
 	InventorChimpumRepository repository;
-	
+
 	@Override
 	public boolean authorise(final Request<Chimpum> request) {
 
 		assert request != null;
-		
+
 		return true;
 	}
 
 	@Override
 	public Collection<Chimpum> findMany(final Request<Chimpum> request) {
-		
+
 		assert request != null;
-		
+
 		int inventorId;
-		
+
 		inventorId = request.getPrincipal().getActiveRoleId();
 		return this.repository.findChimpumsByInventorId(inventorId);
 	}
@@ -42,11 +42,6 @@ public class InventorChimpumListService implements AbstractListService<Inventor,
 		assert entity != null;
 		assert model != null;
 
-		request.unbind(entity, model, "code", "creationDate","title","startDate","endDate","budget");
-
-		
+		request.unbind(entity, model, "code", "creationDate", "title", "startDate", "endDate", "budget");
 	}
-	
-	
-
 }

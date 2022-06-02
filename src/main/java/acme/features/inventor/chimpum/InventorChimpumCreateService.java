@@ -37,9 +37,9 @@ public class InventorChimpumCreateService implements AbstractCreateService<Inven
 
 		principalId = request.getPrincipal().getActiveRoleId();
 		itemId = request.getModel().getInteger("masterId");
+		item = this.repository.findOneItemById(itemId);
 
 		// Check that the item is not a component/tool (depending on the exam)
-		item = this.repository.findOneItemById(itemId);
 		if (item.getType().equals(ItemType.COMPONENT))
 			result = false;
 
@@ -47,8 +47,7 @@ public class InventorChimpumCreateService implements AbstractCreateService<Inven
 		if (this.repository.findOneChimpumByItemId(itemId) != null)
 			result = false;
 
-		// Check that the item has been published. TODO should this be a constraint? we
-		// miss more context in the requirements to decide
+		// Check that the item has been published. We make this assumption (README.md)
 		if (item.isDraftMode())
 			result = false;
 
@@ -61,7 +60,7 @@ public class InventorChimpumCreateService implements AbstractCreateService<Inven
 
 	@Override
 	public void bind(final Request<Chimpum> request, final Chimpum entity, final Errors errors) {
-		request.bind(entity, errors, "title", "description", "startDate", "endDate", "budget", "info");
+		request.bind(entity, errors, "code", "title", "description", "startDate", "endDate", "budget", "info");
 	}
 
 	@Override
@@ -75,14 +74,12 @@ public class InventorChimpumCreateService implements AbstractCreateService<Inven
 
 		int itemId;
 		Item item;
-		String itemName;
 
 		itemId = request.getModel().getInteger("masterId");
 		item = this.repository.findOneItemById(itemId);
-		itemName = item.getName();
 
-		model.setAttribute("item", itemName);
-		model.setAttribute("masterId", itemId);
+		model.setAttribute("itemName", item.getName());
+		model.setAttribute("itemId", item.getId());
 	}
 
 	@Override
@@ -93,7 +90,6 @@ public class InventorChimpumCreateService implements AbstractCreateService<Inven
 		creationDate = new Date(System.currentTimeMillis() - 1);
 
 		result = new Chimpum();
-		result.setCode("22/01/01"); // TODO change for a valid code the exam day
 		result.setCreationDate(creationDate);
 
 		return result;
@@ -129,7 +125,7 @@ public class InventorChimpumCreateService implements AbstractCreateService<Inven
 			endDate = Calendar.getInstance();
 			endDate.setTime(entity.getEndDate());
 
-			endDate.add(Calendar.DAY_OF_YEAR, -7);
+			endDate.add(Calendar.WEEK_OF_MONTH, -1);
 
 			errors.state(request, endDate.after(startDate), "endDate",
 					"inventor.chimpum.form.error.end-date-too-early");
@@ -146,18 +142,44 @@ public class InventorChimpumCreateService implements AbstractCreateService<Inven
 					"inventor.chimpum.form.error.not-accepted-currency");
 			errors.state(request, budget > 0.0, "budget", "inventor.chimpum.form.error.negative-price");
 		}
+
+		if (!errors.hasErrors("code")) {
+			String code;
+			Date creationDate;
+			String onlyNumbers;
+
+			String creationDateOnlyNumbers;
+
+			// ^\\w{3}-yymm:dd$ ==> ABC-2206:02 ==> 2022/06/02
+
+			code = entity.getCode();
+			creationDate = entity.getCreationDate();
+
+			// ABC-2206:02 => 220602
+			onlyNumbers = code.replaceAll("\\D", "");
+
+			// Creation date in the same format and order (220602)
+			creationDateOnlyNumbers = new SimpleDateFormat("yyMMdd").format(creationDate);
+
+			errors.state(request, onlyNumbers.equals(creationDateOnlyNumbers), "code",
+					"inventor.chimpum.form.error.invalid-code-date");
+
+			// Check that there is not a chimpum with the same code
+			Chimpum existing;
+			Integer id;
+
+			existing = this.repository.findOneChimpumByCode(entity.getCode());
+			id = request.getModel().getInteger("id");
+
+			errors.state(request, existing == null || existing.getId() == id, "code",
+					"inventor.chimpum.form.error.duplicated");
+		}
 	}
 
 	@Override
 	public void create(final Request<Chimpum> request, final Chimpum entity) {
-		Date creationDate;
 		int itemId;
 		Item item;
-
-		creationDate = new Date(System.currentTimeMillis() - 1);
-
-		entity.setCreationDate(creationDate);
-		entity.setCode(this.generateCustomCode(creationDate));
 
 		this.repository.save(entity);
 
@@ -166,12 +188,5 @@ public class InventorChimpumCreateService implements AbstractCreateService<Inven
 		item.setChimpum(entity);
 
 		this.repository.save(item);
-
-	}
-
-	private String generateCustomCode(final Date creationDate) {
-		final String pattern = "yy/MM/dd"; // TODO change the exam day. Change in the entity too
-		final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-		return simpleDateFormat.format(creationDate);
 	}
 }

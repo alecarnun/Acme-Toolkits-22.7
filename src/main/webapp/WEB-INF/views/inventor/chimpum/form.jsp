@@ -4,8 +4,9 @@
 <%@taglib prefix="acme" uri="urn:jsptagdir:/WEB-INF/tags"%>
 
 <acme:form>
+	<acme:input-textbox code="inventor.chimpum.form.label.code" path="code" placeholder="TODO REGEX EXAMPLE"/>
+		
 	<jstl:if test="${command != 'create'}">
-		<acme:input-textbox code="inventor.chimpum.form.label.code" path="code"  placeholder="yy/mm/dd" readonly="true"/>
 		<acme:input-textbox code="inventor.chimpum.form.label.creationDate" path="creationDate" readonly="true"/>
 	</jstl:if>
 	
@@ -25,13 +26,13 @@
 	<acme:input-textbox code="inventor.chimpum.form.label.item" path="itemName" readonly="true"/>
 
 	<jstl:choose>
-		<jstl:when test="${acme:anyOf(command, 'show, update, delete, publish')}">
+		<jstl:when test="${acme:anyOf(command, 'show, update, delete')}">
 			<acme:submit code="inventor.chimpum.form.button.update" action="/inventor/chimpum/update"/>
 			<acme:submit code="inventor.chimpum.form.button.delete" action="/inventor/chimpum/delete"/>
 			<acme:button code="inventor.chimpum.form.button.item" action="/inventor/item/show?id=${itemId}"/>
 		</jstl:when>
 		<jstl:when test="${command == 'create'}">
-			<acme:submit code="inventor.chimpum.form.button.create" action="/inventor/chimpum/create?masterId=${masterId}"/>
+			<acme:submit code="inventor.chimpum.form.button.create" action="/inventor/chimpum/create?masterId=${itemId}"/>
 		</jstl:when>
 	</jstl:choose>		
 </acme:form>
