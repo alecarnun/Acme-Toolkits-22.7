@@ -23,7 +23,7 @@ public class InventorChimpumUpdateTest extends TestHarness {
 
 		super.clickOnMenu("Inventor", "List the chimpums of my items");
 		super.checkListingExists();
-		super.sortListing(0, "asc");
+		super.sortListing(1, "asc");
 
 		super.clickOnListingRecord(0);
 
@@ -40,7 +40,7 @@ public class InventorChimpumUpdateTest extends TestHarness {
 		super.clickOnSubmit("Update");
 
 		super.checkListingExists();
-		super.sortListing(0, "asc");
+		super.sortListing(1, "asc");
 		super.checkColumnHasValue(0, 2, title);
 		super.checkColumnHasValue(0, 3, startDate);
 
@@ -62,7 +62,7 @@ public class InventorChimpumUpdateTest extends TestHarness {
 
 	@ParameterizedTest
 	@CsvFileSource(resources = "/inventor/chimpum/update-negative.csv", encoding = "utf-8", numLinesToSkip = 1)
-	@Order(10)
+	@Order(20)
 	public void negativeTest(final String code, final String title, final String description, final String startDate,
 			final String endDate, final String budget, final String info) {
 
@@ -93,11 +93,27 @@ public class InventorChimpumUpdateTest extends TestHarness {
 	}
 
 	@Test
+	@Order(30)
 	public void hackingTest() {
-		// As the framework doesn´t support this hacking feature we will have to perform
+		// As the framework doesn't support this hacking feature we will have to perform
 		// this manually
-		// Update a chimpu of an item as a principal without the "Inventor" role;
-		// Check that a panic happens
+
+		// 1) Start by initiating the Acme Toolkits project
+		// 2) Log in as inventor2 (username=inventor2 password=inventor2)
+		// 3) Go to the inventor menu and click "List my items"
+		// 4) Click on the item which has the associated chimpum
+		// 5) Click on "See chimpum"
+		// 6) Copy the link "inventor/chimpum/show?id=XXX" where XXX is the associated
+		// id of the chimpum
+		// 7) Log out
+		// 8) Log in a different inventor, for example inventor1 (username=inventor1
+		// password=inventor1)
+		// 9) Navigate to the URL inventor/chimpum/update?id=XXX
+		// 10) Check that a panic happens
+
+		// 11) Log out
+		// 12) Navigate to the URL inventor/chimpum/update?id=XXX
+		// 13) Check that a panic happens
 	}
 
 }

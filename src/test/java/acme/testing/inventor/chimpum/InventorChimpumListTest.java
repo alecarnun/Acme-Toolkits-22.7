@@ -36,13 +36,14 @@ public class InventorChimpumListTest extends TestHarness {
 	}
 
 	@Test
+	@Order(20)
 	public void negativeTest() {
 		// As this is a test that does not involve any form, we do not have negative
-		// cases to test,
-		// so this function will be blank.
+		// cases to test, so this function will be blank.
 	}
 
 	@Test
+	@Order(30)
 	public void hackingTest() {
 		super.checkNotLinkExists("Inventor");
 		super.navigate("/inventor/chimpum/list");

@@ -42,19 +42,25 @@ public class InventorChimpumShowTest extends TestHarness {
 	}
 
 	@Test
+	@Order(20)
 	public void negativeTest() {
-		// As this is a test that does not involve any form, we do not have negative
-		// cases to test,
-		// so this function will be blank.
+		// As this is a test that does not involve editing any form, we do not have
+		// negative cases to test, so this function will be blank.
 	}
 
 	@Test
+	@Order(30)
 	public void hackingTest() {
-		// As the framework doesn´t support this hacking feature we will have to perform
+		// As the framework doesn't support this hacking feature we will have to perform
 		// this manually
-		// 1) Start by initiating the Acme toolkits project
-		// 2) Navigate to this URL /inventor/chimpum/show?id=80
-		// 3) Check that a panic happens
-	}
 
+		// 1) Start by initiating the Acme toolkits project
+		// 2) Log in as inventor (username=inventor1, password = inventor1)
+		// 3) Go to Inventor -> List the chimpums of my items
+		// 4) Click one of the chimpums listed
+		// 5) Copy the URL
+		// 6) Log out
+		// 7) Navigate to the previous URL
+		// 8) Check that a panic happens
+	}
 }

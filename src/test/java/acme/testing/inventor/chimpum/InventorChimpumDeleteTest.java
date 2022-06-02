@@ -16,21 +16,23 @@ public class InventorChimpumDeleteTest extends TestHarness {
 	@ParameterizedTest
 	@CsvFileSource(resources = "/inventor/chimpum/delete-positive.csv", encoding = "utf-8", numLinesToSkip = 1)
 	@Order(10)
-	public void positiveTest(final String code,final String creationDate,final String title, final String description,
-							final String startDate, final String endDate,final String budget,final String info,final String itemName,
-							final String codeNew,final String creationDateNew,final String titleNew,final String startDateNew,
-							final String endDateNew,final String budgetNew) {
-		
+	public void positiveTest(final String code, final String creationDate, final String title, final String description,
+			final String startDate, final String endDate, final String budget, final String info,
+			final String codeNext) {
+
+		// We will delete the first Chimpum, ordering by ascendent code. To do this we
+		// will delete the first entry on the list that appears, and check that the new
+		// first entry was the entry which was under the deleted one.
 		super.signIn("inventor1", "inventor1");
-		
+
 		super.clickOnMenu("Inventor", "List the chimpums of my items");
 		super.checkListingExists();
 		super.sortListing(0, "asc");
-		
+
 		super.clickOnListingRecord(0);
-		
+
 		super.checkFormExists();
-		
+
 		super.checkInputBoxHasValue("code", code);
 		super.checkInputBoxHasValue("creationDate", creationDate);
 		super.checkInputBoxHasValue("title", title);
@@ -39,39 +41,43 @@ public class InventorChimpumDeleteTest extends TestHarness {
 		super.checkInputBoxHasValue("endDate", endDate);
 		super.checkInputBoxHasValue("budget", budget);
 		super.checkInputBoxHasValue("info", info);
-		super.checkInputBoxHasValue("itemName", itemName);
-		
+
 		super.clickOnSubmit("Delete");
-		
-		
+
 		super.clickOnMenu("Inventor", "List the chimpums of my items");
 		super.checkListingExists();
 		super.sortListing(0, "asc");
-		
-		super.checkColumnHasValue(0,0, codeNew);
-		super.checkColumnHasValue(0,1, creationDateNew);
-		super.checkColumnHasValue(0,2, titleNew);
-		super.checkColumnHasValue(0,3, startDateNew);
-		super.checkColumnHasValue(0,4, endDateNew);
-		super.checkColumnHasValue(0,5, budgetNew);
-		
+
+		super.clickOnListingRecord(0);
+		super.checkFormExists();
+
+		super.checkInputBoxHasValue("code", codeNext);
 		super.signOut();
-		
-		
 	}
-	
+
 	@Test
+	@Order(20)
 	public void negativeTest() {
-		// As the framework doesn´t support this negative feature we will have to perform this manually
-		// Delete a chimpum for an item as a principal without the "Inventor" role;
-		// Check that a panic happens
+		// As this is a test that does not involve modifying any form, we do not have
+		// negative cases to test, so this function will be blank.
 	}
-	
+
 	@Test
+	@Order(30)
 	public void hackingTest() {
-		// As the framework doesn´t support this hacking feature we will have to perform this manually
-		// Delete a chimpum for an item as a principal without the "Inventor" role;
-		// Check that a panic happens
+		// As the framework doesn't support this hacking feature we will have to perform
+		// this manually
+
+		// 1) Start by initiating the Acme Toolkits project
+		// 2) Log in as inventor2 (username=inventor2 password=inventor2)
+		// 3) Go to the inventor menu and click on "List the chimpums of my items"
+		// 4) Click on the Chimpum
+		// 5) Copy the link "inventor/chimpum/show?id=XXX" where XXX is the associated
+		// id of the chimpum
+		// 6) Log out
+		// 7) Log in as inventor1 (username=inventor1 password=inventor1)
+		// 8) Navigate to the URL "inventor/chimpum/delete?id=XXX"
+		// 9) Check that a panic happens
 	}
 
 }
