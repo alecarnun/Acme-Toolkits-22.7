@@ -25,6 +25,7 @@ public class AdministratorAdministratorDashboardShowService implements AbstractS
 	
 	@Autowired
 	protected ExchangeService exchangeService;
+	
 
 	// AbstractShowService<Patron, PatronDashboard> interface ----------------
 
@@ -114,11 +115,11 @@ public class AdministratorAdministratorDashboardShowService implements AbstractS
 	
 	private List<AdministratorDashboardItem> getStatisticsOfPatronages(final Status status){
 		
-		final List<String> currencies= (List<String>) this.repository.currencies();
+		final List<Object> currencies= this.exchangeService.getAceptedCurrencyList();
 		final List<AdministratorDashboardItem> res = new ArrayList<AdministratorDashboardItem>();
 		
 		for(int i=0;i<currencies.size();i++) {
-			final String currency = currencies.get(i);
+			final String currency = (String) currencies.get(i);
 			
 			final AdministratorDashboardItem itemStats = new AdministratorDashboardItem();
 			itemStats.currency = currency;
@@ -139,11 +140,11 @@ public class AdministratorAdministratorDashboardShowService implements AbstractS
 	
 	private List<AdministratorDashboardItem> getStatisticsOfTools(){
 		
-		final List<String> currencies= (List<String>) this.repository.currencies();
+		final List<Object> currencies= this.exchangeService.getAceptedCurrencyList();
 		final List<AdministratorDashboardItem> res = new ArrayList<AdministratorDashboardItem>();
 		
 		for(int i=0;i<currencies.size();i++) {
-			final String currency = currencies.get(i);
+			final String currency = (String) currencies.get(i);
 			
 			final AdministratorDashboardItem itemStats = new AdministratorDashboardItem();
 			itemStats.currency=currency;
@@ -164,7 +165,7 @@ public class AdministratorAdministratorDashboardShowService implements AbstractS
 	
 	private List<AdministratorDashboardComponentItem> getStatisticsOfComponents(){
 		
-		final List<String> currencies= (List<String>) this.repository.currencies();
+		final List<Object> currencies= this.exchangeService.getAceptedCurrencyList();
 		final List<AdministratorDashboardComponentItem> res = new ArrayList<AdministratorDashboardComponentItem>();
 		
 		final List<String> technologies= (List<String>) this.repository.technologies();
@@ -174,7 +175,7 @@ public class AdministratorAdministratorDashboardShowService implements AbstractS
 		
 		
 			for(int i=0;i<currencies.size();i++) {
-				final String currency = currencies.get(i);
+				final String currency = (String) currencies.get(i);
 				
 				final AdministratorDashboardComponentItem itemStats = new AdministratorDashboardComponentItem();
 				itemStats.technology = technology;
@@ -204,6 +205,7 @@ public class AdministratorAdministratorDashboardShowService implements AbstractS
 			final Money exchange=this.exchangeService.getExchange(source);
 			final Double roundedAmount= Math.round(exchange.getAmount()*100.0)/100.0;
 			return exchange.getCurrency()+" "+roundedAmount;
+
 		}
 		
 	}
@@ -228,5 +230,6 @@ public class AdministratorAdministratorDashboardShowService implements AbstractS
 		return res;
 		
 	}
+	
 
 }
