@@ -27,4 +27,6 @@ inventor.chimpum.form.error.duplicated = Ya existe un chimpum con el mismo códi
 inventor.chimpum.form.error.negative-price = El presupuesto del chimpum tiene que ser positivo
 inventor.chimpum.form.error.not-accepted-currency = Esta divisa no está soportada por el sistema
 inventor.chimpum.form.error.start-date-too-early = El chimpum debe comenzar, al menos, un mes despues de su creación
-inventor.chimpum.form.error.end-date-too-early = The chimpum debe terminar, al menos, una semana despues de empezar
+inventor.chimpum.form.error.end-date-too-early = El chimpum debe terminar, al menos, una semana despues de empezar
+inventor.chimpum.form.error.invalid-code-date = La fecha en el código debe coincidir con la fecha de creación del chimpum
+inventor.chimpum.form.error.duplicated = Ya existe un chimpum con este código

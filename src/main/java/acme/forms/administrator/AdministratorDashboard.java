@@ -67,7 +67,7 @@ public class AdministratorDashboard implements Serializable {
 	List<AdministratorDashboardItem> statsBudgetofDeniedPatronages;
 
 	
-	double ratioOfChimpums;
+	Double ratioOfChimpums;
 	List<AdministratorDashboardChimpum> statsChimpums;
 	
 	// Derived attributes -----------------------------------------------------

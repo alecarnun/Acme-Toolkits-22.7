@@ -28,3 +28,5 @@ inventor.chimpum.form.error.negative-price = The budget must be positive
 inventor.chimpum.form.error.not-accepted-currency = The system does not support this currency
 inventor.chimpum.form.error.start-date-too-early = The chimpum must start, at least, one month after its creation
 inventor.chimpum.form.error.end-date-too-early = The chimpum must end, at least, one week after it starts
+inventor.chimpum.form.error.invalid-code-date = The date in the code must coincide with the chimpum creation date
+inventor.chimpum.form.error.duplicated = There already exists a chimpum with this code

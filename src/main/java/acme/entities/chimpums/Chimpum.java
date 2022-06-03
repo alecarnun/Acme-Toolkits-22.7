@@ -2,9 +2,11 @@ package acme.entities.chimpums;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
@@ -29,23 +31,24 @@ public class Chimpum extends AbstractEntity {
 
 	// Attributes -------------------------------------------------------------
 
-	// TODO created automatically from creationDate in the createService
-	@NotNull
-	@Pattern(regexp = "^\\d{2}/\\d{2}/\\d{2}$") // Change also in the create service
+	@NotBlank
+	@Column(unique = true)
+	// TODO the pattern may change to something like ^\\w{3}-yymm:dd$
+	@Pattern(regexp = "^\\w{3}-\\d{4}:\\d{2}$")
 	protected String code;
 
 	@NotNull
 	@Past
 	@Temporal(TemporalType.TIMESTAMP)
-	protected Date creationDate;
+	protected Date creationDate; // TODO the attribute name may change
 
 	@NotBlank
 	@Length(max = 100)
-	protected String title;
+	protected String title; // TODO the attribute name may change
 
 	@NotBlank
 	@Length(max = 255)
-	protected String description;
+	protected String description; // TODO the attribute name may change
 
 	@NotNull
 	@Temporal(TemporalType.TIMESTAMP)
@@ -56,8 +59,9 @@ public class Chimpum extends AbstractEntity {
 	protected Date endDate;
 
 	@NotNull
-	protected Money budget;
+	@Valid
+	protected Money budget; // TODO the attribute name may change
 
 	@URL
-	protected String info;
+	protected String info; // TODO the attribute name may change
 }

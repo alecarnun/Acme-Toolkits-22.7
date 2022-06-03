@@ -27,4 +27,7 @@ public interface InventorChimpumRepository extends AbstractRepository {
 
 	@Query("select count(sc) > 0 from SystemConfiguration sc where sc.acceptedCurrencies LIKE %:currency%")
 	boolean isAcceptedCurrency(String currency);
+
+	@Query("select c from Chimpum c where c.code = :code")
+	Chimpum findOneChimpumByCode(String code);
 }
