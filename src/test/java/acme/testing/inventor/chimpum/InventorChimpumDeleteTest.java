@@ -27,7 +27,7 @@ public class InventorChimpumDeleteTest extends TestHarness {
 
 		super.clickOnMenu("Inventor", "List the chimpums of my items");
 		super.checkListingExists();
-		super.sortListing(0, "asc");
+		super.sortListing(3, "asc");
 
 		super.clickOnListingRecord(0);
 
@@ -46,7 +46,7 @@ public class InventorChimpumDeleteTest extends TestHarness {
 
 		super.clickOnMenu("Inventor", "List the chimpums of my items");
 		super.checkListingExists();
-		super.sortListing(0, "asc");
+		super.sortListing(3, "asc");
 
 		super.clickOnListingRecord(0);
 		super.checkFormExists();

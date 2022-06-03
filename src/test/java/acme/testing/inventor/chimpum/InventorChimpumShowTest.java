@@ -24,7 +24,7 @@ public class InventorChimpumShowTest extends TestHarness {
 
 		super.clickOnMenu("Inventor", "List the chimpums of my items");
 		super.checkListingExists();
-		super.sortListing(0, "asc");
+		super.sortListing(3, "asc");
 
 		super.clickOnListingRecord(key);
 
